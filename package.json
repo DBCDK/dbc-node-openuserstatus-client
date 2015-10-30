@@ -1,0 +1,43 @@
+{
+  "name": "dbc-node-openuserstatus-client",
+  "version": "0.0.1",
+  "description": "Client for DBC webservice OpenUserStatus",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel/register src/__tests__ -R mocha-jenkins-reporter",
+    "test:junit": "npm run test",
+    "test:watch": "mocha --compilers js:babel/register src/__tests__ -w",
+    "build": "npm run cleardest && babel ./src -d dist",
+    "cleardest": "rm -rf ./dist",
+    "lint": "eslint ./src",
+    "lint:checkstyle": "eslint ./src  -o report.xml -f checkstyle",
+    "watch": "npm run cleardest && babel ./src --watch -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DBCDK/dbc-node-openuserstatus-client"
+  },
+  "keywords": [
+    "dbc"
+  ],
+  "author": "dbcdk",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/DBCDK/dbc-node-openuserstatus-client/issues"
+  },
+  "homepage": "https://github.com/DBCDK/dbc-node-openuserstatus-client#readme",
+  "devDependencies": {
+    "babel": "^5.5.6",
+    "babel-eslint": "^4.0.5",
+    "cache-manager": "^1.0.0",
+    "chai": "^3.0.0",
+    "eslint": "^1.2.0",
+    "mocha": "^2.2.5",
+    "mocha-jenkins-reporter": "^0.1.9"
+  },
+  "dependencies": {
+    "es6-promise": "^2.1.1",
+    "request": "^2.60.0",
+    "xml2js": "^0.4.10"
+  }
+}
