@@ -14,7 +14,7 @@ describe('Test OpenUserStatus getUserStatus', function () {
     this.timeout(5000);
     setTimeout(done, 5000);
     var config = {
-      endpoint: 'https://openuserstatus.addi.dk/1.3/'
+      endpoint: 'https://openuserstatus.addi.dk/test_1.2/'
     };
 
     OpenUserStatus.init(config);
@@ -26,6 +26,29 @@ describe('Test OpenUserStatus getUserStatus', function () {
 
     result.then(function (userStatusResult) {
       _chai.assert.equal(userStatusResult['ous:getUserStatusResponse']['ous:getUserStatusError'][0], 'Service unavailable');
+      done();
+    });
+  });
+});
+
+describe('Test OpenUserStatus cancelOrder', function () {
+
+  it('Assert a cancelOrder error response', function (done) {
+    this.timeout(5000);
+    setTimeout(done, 5000);
+    var config = {
+      endpoint: 'https://openuserstatus.addi.dk/test_1.2/'
+    };
+
+    OpenUserStatus.init(config);
+    var result = OpenUserStatus.cancelOrder({
+      agencyId: 'DK-710100',
+      userId: '000',
+      pinCode: '000'
+    });
+
+    result.then(function (cancelOrderResult) {
+      _chai.assert.equal(cancelOrderResult['ous:cancelOrderResponse']['ous:cancelOrderError'][0], 'Element rule violated');
       done();
     });
   });
