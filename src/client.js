@@ -54,22 +54,15 @@ export function getUserStatus(values) {
   return sendOpenUserStatusRequest(params);
 }
 
+
+export function init(config = null) {
+  console.log('INIT USERSTATUS CLIENT');
+  if (!config || !config.endpoint) {
+    throw new Error('Expected config object but got null or no endpoint provided');
+  }
+  endpoint = config.endpoint;
+}
+
 export const METHODS = {
   getUserStatus: getUserStatus
 };
-
-/**
- * Setting the necessary paramerters for the client to be usable.
- * The endpoint is only set if endpoint is null to allow setting it through
- * environment variables.
- *
- * @param {Object} config Config object with the necessary parameters to use
- * the webservice
- */
-export function init(config) {
-  if (!endpoint) {
-    endpoint = config.endpoint;
-  }
-
-  return METHODS;
-}
