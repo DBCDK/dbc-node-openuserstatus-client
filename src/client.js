@@ -55,6 +55,26 @@ export function getUserStatus(values) {
 }
 
 
+/**
+ * Constructs the object of parameters for OpenUserStatus cancel order request.
+ *
+ * @param {Object} values Object with the necessary parameters
+ * @return {Promise}
+ */
+export function cancelOrder(values) {
+  const params = {
+    action: 'cancelOrder',
+    outputType: 'xml',
+    agencyId: values.agencyId,
+    orderId: values.orderId,
+    orderType: values.orderType,
+    userId: values.userId,
+    userPincode: values.pinCode
+  };
+  return sendOpenUserStatusRequest(params);
+}
+
+
 export function init(config = null) {
   console.log('INIT USERSTATUS CLIENT');
   if (!config || !config.endpoint) {
@@ -64,5 +84,6 @@ export function init(config = null) {
 }
 
 export const METHODS = {
-  getUserStatus: getUserStatus
+  getUserStatus: getUserStatus,
+  cancelOrder: cancelOrder
 };
