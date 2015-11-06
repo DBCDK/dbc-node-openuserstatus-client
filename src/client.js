@@ -36,7 +36,7 @@ function sendOpenUserStatusRequest(params) {
           statusCode: response.statusCode,
           statusMessage: response.statusMessage,
           response: response
-        }
+        };
         // make sure all responses have a reference to orderId
         if (params.orderId) {
           res.orderId = params.orderId;
@@ -86,7 +86,6 @@ export function cancelOrder(values) {
 
 
 export function init(config = null) {
-  console.log('INIT USERSTATUS CLIENT');
   if (!config || !config.endpoint) {
     throw new Error('Expected config object but got null or no endpoint provided');
   }
