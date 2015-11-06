@@ -53,3 +53,26 @@ describe('Test OpenUserStatus cancelOrder', function () {
     });
   });
 });
+
+describe('Test OpenUserStatus renewLoan', function () {
+
+  it('Assert a renewLoan error response', function (done) {
+    this.timeout(5000);
+    setTimeout(done, 5000);
+    var config = {
+      endpoint: 'https://openuserstatus.addi.dk/test_1.2/'
+    };
+
+    OpenUserStatus.init(config);
+    var result = OpenUserStatus.renewLoan({
+      agencyId: 'DK-100451',
+      userId: '000',
+      pinCode: '000'
+    });
+
+    result.then(function (renewLoanResult) {
+      _chai.assert.equal(renewLoanResult['ous:renewLoanResponse']['ous:renewLoanError'][0], 'Element rule violated');
+      done();
+    });
+  });
+});

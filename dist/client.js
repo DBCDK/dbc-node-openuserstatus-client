@@ -5,6 +5,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.getUserStatus = getUserStatus;
 exports.cancelOrder = cancelOrder;
+exports.renewLoan = renewLoan;
 exports.init = init;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -31,20 +32,30 @@ function sendOpenUserStatusRequest(params) {
       url: endpoint,
       qs: params
     };
+
     (0, _request2['default'])(options, function (error, response) {
       if (response.statusCode === 200) {
         (0, _xml2js.parseString)(response.body, function (err, res) {
           if (!err) {
+            if (params.orderId) {
+              // make sure all responses have a reference to orderId
+              res.orderId = params.orderId;
+            }
             resolve(res);
           }
         });
       } else {
-        reject({
+        var res = {
           type: 'Error',
           statusCode: response.statusCode,
           statusMessage: response.statusMessage,
           response: response
-        });
+        };
+        // make sure all responses have a reference to orderId
+        if (params.orderId) {
+          res.orderId = params.orderId;
+        }
+        reject(res);
       }
     });
   });
@@ -88,25 +99,37 @@ function cancelOrder(values) {
   return sendOpenUserStatusRequest(params);
 }
 
-var METHODS = {
-  getUserStatus: getUserStatus,
-  cancelOrder: cancelOrder
-};
-
-exports.METHODS = METHODS;
 /**
- * Setting the necessary paramerters for the client to be usable.
- * The endpoint is only set if endpoint is null to allow setting it through
- * environment variables.
+ * Constructs the object of parameters for OpenUserStatus cancel order request.
  *
- * @param {Object} config Config object with the necessary parameters to use
- * the webservice
+ * @param {Object} values Object with the necessary parameters
+ * @return {Promise}
  */
 
-function init(config) {
-  if (!endpoint) {
-    endpoint = config.endpoint;
-  }
-
-  return METHODS;
+function renewLoan(values) {
+  var params = {
+    action: 'renewLoan',
+    outputType: 'xml',
+    agencyId: values.agencyId,
+    loanId: values.loanId,
+    userId: values.userId,
+    userPincode: values.pinCode
+  };
+  return sendOpenUserStatusRequest(params);
 }
+
+function init() {
+  var config = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
+  if (!config || !config.endpoint) {
+    throw new Error('Expected config object but got null or no endpoint provided');
+  }
+  endpoint = config.endpoint;
+}
+
+var METHODS = {
+  getUserStatus: getUserStatus,
+  cancelOrder: cancelOrder,
+  renewLoan: renewLoan
+};
+exports.METHODS = METHODS;
