@@ -18,20 +18,30 @@ function sendOpenUserStatusRequest(params) {
       url: endpoint,
       qs: params
     };
+
     request(options, function (error, response) {
       if (response.statusCode === 200) {
         parseString(response.body, function (err, res) {
           if (!err) {
+            if (params.orderId) {
+              // make sure all responses have a reference to orderId
+              res.orderId = params.orderId;
+            }
             resolve(res);
           }
         });
       } else {
-        reject({
+        let res = {
           type: 'Error',
           statusCode: response.statusCode,
           statusMessage: response.statusMessage,
           response: response
-        });
+        }
+        // make sure all responses have a reference to orderId
+        if (params.orderId) {
+          res.orderId = params.orderId;
+        }
+        reject(res);
       }
     });
   });
