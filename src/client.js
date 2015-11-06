@@ -73,9 +73,28 @@ export function cancelOrder(values) {
   return sendOpenUserStatusRequest(params);
 }
 
+/**
+ * Constructs the object of parameters for OpenUserStatus cancel order request.
+ *
+ * @param {Object} values Object with the necessary parameters
+ * @return {Promise}
+ */
+export function renewLoan(values) {
+  const params = {
+    action: 'renewLoan',
+    outputType: 'xml',
+    agencyId: values.agencyId,
+    loanId: values.loanId,
+    userId: values.userId,
+    userPincode: values.pinCode
+  };
+  return sendOpenUserStatusRequest(params);
+}
+
 export const METHODS = {
   getUserStatus: getUserStatus,
-  cancelOrder: cancelOrder
+  cancelOrder: cancelOrder,
+  renewLoan: renewLoan
 };
 
 /**
