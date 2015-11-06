@@ -18,20 +18,30 @@ function sendOpenUserStatusRequest(params) {
       url: endpoint,
       qs: params
     };
+
     request(options, function (error, response) {
       if (response.statusCode === 200) {
         parseString(response.body, function (err, res) {
           if (!err) {
+            if (params.orderId) {
+              // make sure all responses have a reference to orderId
+              res.orderId = params.orderId;
+            }
             resolve(res);
           }
         });
       } else {
-        reject({
+        let res = {
           type: 'Error',
           statusCode: response.statusCode,
           statusMessage: response.statusMessage,
           response: response
-        });
+        };
+        // make sure all responses have a reference to orderId
+        if (params.orderId) {
+          res.orderId = params.orderId;
+        }
+        reject(res);
       }
     });
   });
@@ -54,6 +64,7 @@ export function getUserStatus(values) {
   return sendOpenUserStatusRequest(params);
 }
 
+
 /**
  * Constructs the object of parameters for OpenUserStatus cancel order request.
  *
@@ -73,23 +84,15 @@ export function cancelOrder(values) {
   return sendOpenUserStatusRequest(params);
 }
 
+
+export function init(config = null) {
+  if (!config || !config.endpoint) {
+    throw new Error('Expected config object but got null or no endpoint provided');
+  }
+  endpoint = config.endpoint;
+}
+
 export const METHODS = {
   getUserStatus: getUserStatus,
   cancelOrder: cancelOrder
 };
-
-/**
- * Setting the necessary paramerters for the client to be usable.
- * The endpoint is only set if endpoint is null to allow setting it through
- * environment variables.
- *
- * @param {Object} config Config object with the necessary parameters to use
- * the webservice
- */
-export function init(config) {
-  if (!endpoint) {
-    endpoint = config.endpoint;
-  }
-
-  return METHODS;
-}
