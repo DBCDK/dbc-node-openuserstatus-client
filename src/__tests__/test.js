@@ -75,3 +75,27 @@ describe('Test OpenUserStatus renewLoan', () => {
 
 });
 
+describe('Test OpenUserStatus updateOrder', () => {
+
+  it('Assert a updateOrderRequest error response', function(done) {
+    this.timeout(5000);
+    setTimeout(done, 5000);
+    const config = {
+      endpoint: 'https://openuserstatus.addi.dk/test_1.2/'
+    };
+
+    OpenUserStatus.init(config);
+    let result = OpenUserStatus.updateOrder({
+      agencyId: 'DK-100451',
+      userId: '000',
+      pinCode: '000'
+    });
+
+    result.then(function (updateOrderResult) {
+      assert.equal(updateOrderResult['ous:updateOrderResponse']['ous:updateOrderError'][0], 'Element rule violated');
+      done();
+    });
+  });
+
+});
+
