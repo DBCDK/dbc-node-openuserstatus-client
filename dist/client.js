@@ -6,6 +6,7 @@ Object.defineProperty(exports, '__esModule', {
 exports.getUserStatus = getUserStatus;
 exports.cancelOrder = cancelOrder;
 exports.renewLoan = renewLoan;
+exports.updateOrder = updateOrder;
 exports.init = init;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -118,6 +119,26 @@ function renewLoan(values) {
   return sendOpenUserStatusRequest(params);
 }
 
+/**
+ * Constructs the object of parameters for OpenUserStatus update order request.
+ *
+ * @param {Object} values Object with the necessary parameters
+ * @return {Promise}
+ */
+
+function updateOrder(values) {
+  var params = {
+    action: 'updateOrder',
+    outputType: 'xml',
+    agencyId: values.agencyId,
+    orderId: values.orderId,
+    pickUpAgency: values.pickUpAgency,
+    userId: values.userId,
+    userPincode: values.pinCode
+  };
+  return sendOpenUserStatusRequest(params);
+}
+
 function init() {
   var config = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 
@@ -130,6 +151,7 @@ function init() {
 var METHODS = {
   getUserStatus: getUserStatus,
   cancelOrder: cancelOrder,
-  renewLoan: renewLoan
+  renewLoan: renewLoan,
+  updateOrder: updateOrder
 };
 exports.METHODS = METHODS;

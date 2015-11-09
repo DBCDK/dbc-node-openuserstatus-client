@@ -102,6 +102,25 @@ export function renewLoan(values) {
   return sendOpenUserStatusRequest(params);
 }
 
+/**
+ * Constructs the object of parameters for OpenUserStatus update order request.
+ *
+ * @param {Object} values Object with the necessary parameters
+ * @return {Promise}
+ */
+export function updateOrder(values) {
+  const params = {
+    action: 'updateOrder',
+    outputType: 'xml',
+    agencyId: values.agencyId,
+    orderId: values.orderId,
+    pickUpAgency: values.pickUpAgency,
+    userId: values.userId,
+    userPincode: values.pinCode
+  };
+  return sendOpenUserStatusRequest(params);
+}
+
 export function init(config = null) {
   if (!config || !config.endpoint) {
     throw new Error('Expected config object but got null or no endpoint provided');
@@ -112,5 +131,6 @@ export function init(config = null) {
 export const METHODS = {
   getUserStatus: getUserStatus,
   cancelOrder: cancelOrder,
-  renewLoan: renewLoan
+  renewLoan: renewLoan,
+  updateOrder: updateOrder
 };
