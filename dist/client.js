@@ -1,10 +1,25 @@
 'use strict';
 
-import {Promise} from 'es6-promise';
-import request from 'request';
-import {parseString} from 'xml2js';
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.getUserStatus = getUserStatus;
+exports.cancelOrder = cancelOrder;
+exports.renewLoan = renewLoan;
+exports.updateOrder = updateOrder;
+exports.init = init;
 
-let endpoint = null;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _es6Promise = require('es6-promise');
+
+var _request = require('request');
+
+var _request2 = _interopRequireDefault(_request);
+
+var _xml2js = require('xml2js');
+
+var endpoint = null;
 
 /**
  * Retrieves data from the webservice based on the parameters given
@@ -13,15 +28,15 @@ let endpoint = null;
  * @return {Promise}
  */
 function sendOpenUserStatusRequest(params) {
-  return new Promise((resolve, reject) => {
-    let options = {
+  return new _es6Promise.Promise(function (resolve, reject) {
+    var options = {
       url: endpoint,
       qs: params
     };
 
-    request(options, function (error, response) {
+    (0, _request2['default'])(options, function (error, response) {
       if (response.statusCode === 200) {
-        parseString(response.body, function (err, res) {
+        (0, _xml2js.parseString)(response.body, function (err, res) {
           if (params.orderId) {
             // make sure all responses have a reference to orderId
             res.orderId = params.orderId;
@@ -35,7 +50,7 @@ function sendOpenUserStatusRequest(params) {
           }
         });
       } else {
-        let res = {
+        var res = {
           type: 'Error',
           statusCode: response.statusCode,
           statusMessage: response.statusMessage,
@@ -61,8 +76,9 @@ function sendOpenUserStatusRequest(params) {
  * @param {Object} values Object with the necessary parameters
  * @return {Promise}
  */
-export function getUserStatus(values) {
-  const params = {
+
+function getUserStatus(values) {
+  var params = {
     action: 'getUserStatus',
     outputType: 'xml',
     agencyId: values.agencyId,
@@ -72,15 +88,15 @@ export function getUserStatus(values) {
   return sendOpenUserStatusRequest(params);
 }
 
-
 /**
  * Constructs the object of parameters for OpenUserStatus cancel order request.
  *
  * @param {Object} values Object with the necessary parameters
  * @return {Promise}
  */
-export function cancelOrder(values) {
-  const params = {
+
+function cancelOrder(values) {
+  var params = {
     action: 'cancelOrder',
     outputType: 'xml',
     agencyId: values.agencyId,
@@ -98,8 +114,9 @@ export function cancelOrder(values) {
  * @param {Object} values Object with the necessary parameters
  * @return {Promise}
  */
-export function renewLoan(values) {
-  const params = {
+
+function renewLoan(values) {
+  var params = {
     action: 'renewLoan',
     outputType: 'xml',
     agencyId: values.agencyId,
@@ -116,8 +133,9 @@ export function renewLoan(values) {
  * @param {Object} values Object with the necessary parameters
  * @return {Promise}
  */
-export function updateOrder(values) {
-  const params = {
+
+function updateOrder(values) {
+  var params = {
     action: 'updateOrder',
     outputType: 'xml',
     agencyId: values.agencyId,
@@ -129,16 +147,19 @@ export function updateOrder(values) {
   return sendOpenUserStatusRequest(params);
 }
 
-export function init(config = null) {
+function init() {
+  var config = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+
   if (!config || !config.endpoint) {
     throw new Error('Expected config object but got null or no endpoint provided');
   }
   endpoint = config.endpoint;
 }
 
-export const METHODS = {
+var METHODS = {
   getUserStatus: getUserStatus,
   cancelOrder: cancelOrder,
   renewLoan: renewLoan,
   updateOrder: updateOrder
 };
+exports.METHODS = METHODS;
