@@ -37,11 +37,15 @@ function sendOpenUserStatusRequest(params) {
     (0, _request2['default'])(options, function (error, response) {
       if (response.statusCode === 200) {
         (0, _xml2js.parseString)(response.body, function (err, res) {
+          if (params.orderId) {
+            // make sure all responses have a reference to orderId
+            res.orderId = params.orderId;
+          }
+          if (params.loanId) {
+            // make sure all responses have a reference to loanId
+            res.loanId = params.loanId;
+          }
           if (!err) {
-            if (params.orderId) {
-              // make sure all responses have a reference to orderId
-              res.orderId = params.orderId;
-            }
             resolve(res);
           }
         });
@@ -55,6 +59,10 @@ function sendOpenUserStatusRequest(params) {
         // make sure all responses have a reference to orderId
         if (params.orderId) {
           res.orderId = params.orderId;
+        }
+        // make sure all responses have a reference to loanId
+        if (params.loanId) {
+          res.loanId = params.loanId;
         }
         reject(res);
       }
