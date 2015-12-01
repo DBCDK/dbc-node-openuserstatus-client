@@ -1,10 +1,7 @@
 'use strict';
 
-import {Promise} from 'es6-promise';
 import request from 'request';
 import {parseString} from 'xml2js';
-
-let endpoint = null;
 
 /**
  * Retrieves data from the webservice based on the parameters given
@@ -12,7 +9,7 @@ let endpoint = null;
  * @param {Object} params Parameters for the request
  * @return {Promise}
  */
-function sendOpenUserStatusRequest(params) {
+function sendOpenUserStatusRequest(endpoint, params) {
   return new Promise((resolve, reject) => {
     let options = {
       url: endpoint,
@@ -61,7 +58,7 @@ function sendOpenUserStatusRequest(params) {
  * @param {Object} values Object with the necessary parameters
  * @return {Promise}
  */
-export function getUserStatus(values) {
+function getUserStatus(endpoint, values) {
   const params = {
     action: 'getUserStatus',
     outputType: 'xml',
@@ -69,7 +66,7 @@ export function getUserStatus(values) {
     userId: values.userId,
     userPincode: values.pinCode
   };
-  return sendOpenUserStatusRequest(params);
+  return sendOpenUserStatusRequest(endpoint, params);
 }
 
 
@@ -79,7 +76,7 @@ export function getUserStatus(values) {
  * @param {Object} values Object with the necessary parameters
  * @return {Promise}
  */
-export function cancelOrder(values) {
+function cancelOrder(endpoint, values) {
   const params = {
     action: 'cancelOrder',
     outputType: 'xml',
@@ -89,7 +86,7 @@ export function cancelOrder(values) {
     userId: values.userId,
     userPincode: values.pinCode
   };
-  return sendOpenUserStatusRequest(params);
+  return sendOpenUserStatusRequest(endpoint, params);
 }
 
 /**
@@ -98,7 +95,7 @@ export function cancelOrder(values) {
  * @param {Object} values Object with the necessary parameters
  * @return {Promise}
  */
-export function renewLoan(values) {
+function renewLoan(endpoint, values) {
   const params = {
     action: 'renewLoan',
     outputType: 'xml',
@@ -107,7 +104,7 @@ export function renewLoan(values) {
     userId: values.userId,
     userPincode: values.pinCode
   };
-  return sendOpenUserStatusRequest(params);
+  return sendOpenUserStatusRequest(endpoint, params);
 }
 
 /**
@@ -116,7 +113,7 @@ export function renewLoan(values) {
  * @param {Object} values Object with the necessary parameters
  * @return {Promise}
  */
-export function updateOrder(values) {
+function updateOrder(endpoint, values) {
   const params = {
     action: 'updateOrder',
     outputType: 'xml',
@@ -126,19 +123,18 @@ export function updateOrder(values) {
     userId: values.userId,
     userPincode: values.pinCode
   };
-  return sendOpenUserStatusRequest(params);
+  return sendOpenUserStatusRequest(endpoint, params);
 }
 
-export function init(config = null) {
+export default function OpenUserStatus(config = null) {
   if (!config || !config.endpoint) {
     throw new Error('Expected config object but got null or no endpoint provided');
   }
-  endpoint = config.endpoint;
-}
 
-export const METHODS = {
-  getUserStatus: getUserStatus,
-  cancelOrder: cancelOrder,
-  renewLoan: renewLoan,
-  updateOrder: updateOrder
-};
+  return {
+    getUserStatus: getUserStatus.bind(null, config.endpoint),
+    cancelOrder: cancelOrder.bind(null, config.endpoint),
+    renewLoan: renewLoan.bind(null, config.endpoint),
+    updateOrder: updateOrder.bind(null, config.endpoint)
+  };
+}
