@@ -3,8 +3,6 @@
 import request from 'request';
 import {parseString} from 'xml2js';
 
-let endpoint = null;
-
 /**
  * Retrieves data from the webservice based on the parameters given
  *
@@ -132,7 +130,6 @@ export default function OpenUserStatus(config = null) {
   if (!config || !config.endpoint) {
     throw new Error('Expected config object but got null or no endpoint provided');
   }
-  config.endpoint;
 
   return {
     getUserStatus: getUserStatus.bind(null, config.endpoint),
